@@ -183,7 +183,7 @@ impl GitClient {
             }
             BackendType::Gitlab => self.create_gitlab_release(release_info).await,
         }
-        .context("Failed to create release")
+        .with_context(|| format!("Failed to create release with info {release_info:?}"))
     }
 
     /// Same as Gitea.
@@ -197,7 +197,7 @@ impl GitClient {
             name: &release_info.release_name,
             draft: &release_info.draft,
             prerelease: &release_info.pre_release,
-            make_latest: release_info.latest.map(|l| l.to_string()),
+            make_latest: Some(release_info.latest.map(|l| l.to_string()).unwrap_or_else(|| "true".to_string())),
         };
         self.client
             .post(format!("{}/releases", self.repo_url()))

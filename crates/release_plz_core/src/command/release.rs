@@ -678,6 +678,7 @@ fn get_git_client(input: &ReleaseRequest) -> anyhow::Result<GitClient> {
     GitClient::new(git_release.backend.clone())
 }
 
+#[derive(Debug)]
 pub struct GitReleaseInfo {
     pub git_tag: String,
     pub release_name: String,
